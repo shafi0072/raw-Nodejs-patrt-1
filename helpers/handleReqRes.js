@@ -7,6 +7,8 @@
     const handler = {};
     const {StringDecoder} = require('string_decoder');
     const url = require('url')
+    const routes = require('../routes')
+    const {notFoundHandler}  = require('../handlers/routeHandler/notFoundHandler')
 
     handler.handleReqRes =  (req, res) => {
         // request handling 
@@ -17,10 +19,26 @@
         const method = req.method.toLowerCase()
         const queryStringObject = parsedUrl.query;
         const headersObj = req.headers;  
-    
+        
+        const requestProperties = {
+            parsedUrl,
+            path,
+            trimd,
+            method,
+            queryStringObject,
+            headersObj
+        }
+
+
         const decoder = new StringDecoder('utf-8');
         let realData = '';
+        const chosenHandler = routes[trimd] ? routes[trimd] :  notFoundHandler;
         
+        chosenHandler(requestProperties, (statusCode, payload) => {
+            statusCode = typeof(statusCode) === 'number' ? statusCode : 500
+            payload = typeof(payload) === 'object'? payload : {};
+        })
+
         req.on('data', (buffer) => {
             realData += decoder.write(buffer)
         })

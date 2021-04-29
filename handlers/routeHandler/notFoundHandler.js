@@ -2,8 +2,12 @@
 // module scarpholding
 
 const handler = {};
-handler.notFoundHandler = () => {
-    console.log('not found');
+handler.notFoundHandler = (requestProperties, callBack) => {
+    console.log(requestProperties);
+    callBack(404, {
+        message:'this is a notfound url',
+
+    })
 }
 
 module.exports = handler;

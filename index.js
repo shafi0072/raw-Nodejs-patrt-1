@@ -4,11 +4,14 @@ const http = require('http')
 
 const {handleReqRes} = require('./helpers/handleReqRes');
 
-
+const data = require('./lib/data')
 
 // app object
 const app = {};
-
+// testing File System
+data.create('test', 'newFile', {'name':'bangladesh', 'language':'bangla'}, (err) => {
+    console.log('error was', err);
+})
 
 // config
 app.config = {
